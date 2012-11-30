@@ -28,6 +28,8 @@ single: true
 {% if site.disqus_short_name and page.comments == true %}
   <section>
     <h1>评论</h1>
+	<!--<input type="checkbox" id="disqusCheckId" onclick="
+	var email = document.getElementsByName('author-email');if(this.checked){email.value='guest@suucha.org';}else{}" /><label for="disqusCheckId">匿名评论</label>-->
     <div id="disqus_thread" aria-live="polite">{% include post/disqus_thread.html %}</div>
   </section>
 {% endif %}
