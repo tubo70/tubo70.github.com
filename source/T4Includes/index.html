@@ -2,10 +2,143 @@
 layout: page
 title: "T4Includes项目"
 footer: false
+sharing: false
 ---
+<h4>T4Includes目前包括以下项目：</h4>
 
-<h2>T4Includes目前包括以下项目：</h2>
 <ul>
-<li>VSHostT4Include</li>
-<li>RexGenViaT4</li>
+  <li>VSHostT4Include </li>
+
+  <li>RexGenViaT4 </li>
 </ul>
+
+<p>&#160;</p>
+
+<h2>VSHostT4Include</h2>
+
+<p>VSHostT4Include提供了一个在t4模版文件中操作当前Visual Studio实例的类(操作Solution和Project等)和一些静态方法：</p>
+
+<p>静态方法：</p>
+
+<ul>
+  <li>public static ProjectItem FindContainer(ProjectItem item)//查找给定的项目的父级，如果没有父级就返回自己。 </li>
+
+  <li>public static Project FindProject(Solution solution, string projectName)//根据项目名称在指定的解决方案中查找项目。 </li>
+
+  <li>public static Project[] AllProjects(Solution solution)//获取指定的解决方案中的所有项目。 </li>
+
+  <li>public static string GetRelativePath(ProjectItem parent, ProjectItem child)//获取给定的2个项目项的相对路径。 </li>
+
+  <li>public static ProjectItem FindItem(ProjectItems items, string itemName, bool create)//根据指定的项目项的名称和项目项列表查找项目项，这里的项目项可以是具体的文件（包括在项目中的相对路径），也可以是文件夹，如果是文件夹还可以指定是否创建文件夹 </li>
+
+  <li>public static void CheckoutFileIfRequired(VSHost vsHost, string fileName)//如果有必要从源代码管理器中签出文件 </li>
+</ul>
+
+<p>实例方法和属性：</p>
+
+<ul>
+  <li>public string GetFileFullPath(string fileWithProjectName)//根据给定的文件名称，获取文件的全路径，文件名称的格式可以是以下3种之一：<a href="mailto:filename@projectname">filename@projectname</a>、projectname:filename、filename(模板文件所在的项目) </li>
+
+  <li>public DTE DTE{get;set;}//DTE </li>
+
+  <li>public Project CurrentProject{get;set;}//tt模板文件所在的项目 </li>
+
+  <li>public ProjectItem TemplateItem{get;set;}//tt模板文件 </li>
+
+  <li>public string AssemblyName{get;set;}//当前项目的程序集名称 </li>
+
+  <li>public string RootNamespace{get;set;}//当前项目的默认命名空间 </li>
+
+  <li>public void CheckoutFileIfRequired(string fileName)//如果有必要从源代码管理器中签出文件 </li>
+</ul>
+
+<p>构造函数：</p>
+
+<ul>
+  <li>public VSHost(GeneratedTextTransformation trans)//trans就是.tt文件中的this </li>
+</ul>
+
+<p>直接在Nuget的控制台窗口中安装（会在当前项目下新建一个T4Includes文件夹）：</p>
+<img border="0" alt="install vshostt4include" src="/images/T4Includes/nuget-install-vshostt4include.png" /> 
+
+<p>&#160;</p>
+
+<h2>ResxGenViaT4</h2>
+
+<p>这是一个资源文件（.resx）自动生成的T4文件，可以帮助我们更方便地维护资源文件。我们可以在代码中直接使用默认语言来书写提示信息等，而不需要在资源文件中去新建一条资源：</p>
+
+<pre class="csharpcode"><span class="kwrd">throw</span> <span class="kwrd">new</span> Exception(Resources.Resource(<span class="str">&quot;文件{0}不存在&quot;</span>, fileName));</pre>
+<style type="text/css">
+
+
+
+.csharpcode, .csharpcode pre
+{
+	font-size: small;
+	color: black;
+	font-family: consolas, "Courier New", courier, monospace;
+	background-color: #ffffff;
+	/*white-space: pre;*/
+}
+.csharpcode pre { margin: 0em; }
+.csharpcode .rem { color: #008000; }
+.csharpcode .kwrd { color: #0000ff; }
+.csharpcode .str { color: #006080; }
+.csharpcode .op { color: #0000c0; }
+.csharpcode .preproc { color: #cc6633; }
+.csharpcode .asp { background-color: #ffff00; }
+.csharpcode .html { color: #800000; }
+.csharpcode .attr { color: #ff0000; }
+.csharpcode .alt 
+{
+	background-color: #f4f4f4;
+	width: 100%;
+	margin: 0em;
+}
+.csharpcode .lnum { color: #606060; }</style>
+
+<p>通过ResxGenViaT4会自动生成对应的.resx文件：</p>
+<img border="0" alt="resx" src="/images/T4Includes/resx1.png" /> 
+
+<p>同时可以指定生成其他语言的.resx文件：</p>
+
+<pre class="csharpcode">&lt;#@ template  debug=<span class="str">&quot;true&quot;</span> hostSpecific=<span class="str">&quot;true&quot;</span> #&gt;
+&lt;#@ include file=<span class="str">&quot;Resources.CS.ttinclude&quot;</span> #&gt;&lt;#@
+output extension=<span class="str">&quot;.cs&quot;</span>#&gt;&lt;#
+VSHost vsHost = <span class="kwrd">new</span> VSHost(<span class="kwrd">this</span>);
+<span class="kwrd">string</span>[] langs = <span class="kwrd">new</span> <span class="kwrd">string</span>[]{<span class="str">&quot;en&quot;</span>};
+GenResx(vsHost, langs);
+#&gt;</pre>
+<style type="text/css">
+
+
+.csharpcode, .csharpcode pre
+{
+	font-size: small;
+	color: black;
+	font-family: consolas, "Courier New", courier, monospace;
+	background-color: #ffffff;
+	/*white-space: pre;*/
+}
+.csharpcode pre { margin: 0em; }
+.csharpcode .rem { color: #008000; }
+.csharpcode .kwrd { color: #0000ff; }
+.csharpcode .str { color: #006080; }
+.csharpcode .op { color: #0000c0; }
+.csharpcode .preproc { color: #cc6633; }
+.csharpcode .asp { background-color: #ffff00; }
+.csharpcode .html { color: #800000; }
+.csharpcode .attr { color: #ff0000; }
+.csharpcode .alt 
+{
+	background-color: #f4f4f4;
+	width: 100%;
+	margin: 0em;
+}
+.csharpcode .lnum { color: #606060; }</style>
+
+<p>然后编辑.en.resx文件，翻译对应的条目就可以了：</p>
+<img border="0" alt="resx" src="/images/T4Includes/resx1.png" /> 
+
+<p>直接在Nuget的控制台窗口中安装（依赖VSHostT4Includes安装包）：</p>
+<img border="0" alt="install vshostt4include" src="/images/T4Includes/nuget-install-resxgenviat4.png" />

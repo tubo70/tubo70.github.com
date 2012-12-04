@@ -2,7 +2,104 @@
 layout: page
 title: "Suucha Expression 项目"
 footer: false
+sharing: false
 ---
+<h2>概述</h2>
 
-<h2>Suucha Expression 项目</h2>
+<p>Suucha Expression 是一个表达式类，可适用于需要动态构造查询条件的前端(JavaScript)和后端(C#)的代码中。并且提供基于IQueryable的Where扩展。</p>
 
+<p>提供三种类型的表达式：SuuchaMemberExpression（成员表达式）、SuuchaConstantExpression（常量表达式）、SuuchaBinaryExprssion（二元表达式，可设置多种逻辑操作，比如等于、大于、In、Like等）。</p>
+
+<h2>示例</h2>
+
+<pre class="csharpcode"><span class="rem">//Javascript</span>
+<span class="kwrd">var</span> condition = Suucha.Expression.Equal(<span class="str">'Name'</span>, <span class="str">'name'</span>);
+condition = Suucha.Expression.And(condition, Suucha.Expression.Equal(<span class="str">'Code'</span>, <span class="str">'01'</span>));</pre>
+
+<pre class="csharpcode"><span class="rem">//C#</span>
+SuuchaExpression expression = SuuchaExpression.Equal(<span class="str">&quot;Code&quot;</span>, <span class="str">&quot;1.1&quot;</span>);
+var result = list.AsQueryable().Where(expression).ToList();
+expression = SuuchaExpression.Equal(<span class="kwrd">new</span> SuuchaMemberExpression(<span class="str">&quot;Code&quot;</span>), 
+             <span class="kwrd">new</span> SuuchaConstantExpression(<span class="str">&quot;1.1&quot;</span>));
+
+expression = SuuchaExpression.Like(<span class="kwrd">new</span> SuuchaMemberExpression(<span class="str">&quot;Code&quot;</span>), 
+             <span class="kwrd">new</span> SuuchaConstantExpression(<span class="str">&quot;%.1&quot;</span>)); <span class="rem">//EndsWith</span>
+
+<span class="rem">//OrderBy</span>
+result = list.AsQueryable().OrderBy(SuuchaOrderBy.OrderBy(<span class="str">&quot;Name&quot;</span>)
+         .ThenByDescending(<span class="str">&quot;Order&quot;</span>)).ToList();
+result = list.AsQueryable().OrderBy(SuuchaOrderBy&lt;TestClass1&gt;.OrderBy(t =&gt; t.Name)
+         .ThenByDescending(t =&gt; t.Order)).ToList();</pre>
+
+<h2>安装</h2>
+
+<p>直接从Nuget控制台安装： </p>
+
+<p><img border="0" alt="install suuchaexp" src="/images/SuuchaExp/nuget-install-suuchaexp.png" /> </p>
+
+<p>&#160;</p>
+
+<h2>源代码</h2>
+<style type="text/css">
+
+
+
+
+.csharpcode, .csharpcode pre
+{
+	font-size: small;
+	color: black;
+	font-family: consolas, "Courier New", courier, monospace;
+	background-color: #ffffff;
+	/*white-space: pre;*/
+}
+.csharpcode pre { margin: 0em; }
+.csharpcode .rem { color: #008000; }
+.csharpcode .kwrd { color: #0000ff; }
+.csharpcode .str { color: #006080; }
+.csharpcode .op { color: #0000c0; }
+.csharpcode .preproc { color: #cc6633; }
+.csharpcode .asp { background-color: #ffff00; }
+.csharpcode .html { color: #800000; }
+.csharpcode .attr { color: #ff0000; }
+.csharpcode .alt 
+{
+	background-color: #f4f4f4;
+	width: 100%;
+	margin: 0em;
+}
+.csharpcode .lnum { color: #606060; }</style><style type="text/css">
+
+
+
+
+
+
+
+
+.csharpcode, .csharpcode pre
+{
+	font-size: small;
+	color: black;
+	font-family: consolas, "Courier New", courier, monospace;
+	background-color: #ffffff;
+	/*white-space: pre;*/
+}
+.csharpcode pre { margin: 0em; }
+.csharpcode .rem { color: #008000; }
+.csharpcode .kwrd { color: #0000ff; }
+.csharpcode .str { color: #006080; }
+.csharpcode .op { color: #0000c0; }
+.csharpcode .preproc { color: #cc6633; }
+.csharpcode .asp { background-color: #ffff00; }
+.csharpcode .html { color: #800000; }
+.csharpcode .attr { color: #ff0000; }
+.csharpcode .alt 
+{
+	background-color: #f4f4f4;
+	width: 100%;
+	margin: 0em;
+}
+.csharpcode .lnum { color: #606060; }</style>
+
+<p><a href="http://suuchaexp.codeplex.com/" target="_blank">http://suuchaexp.codeplex.com/</a></p>
